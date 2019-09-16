@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.modal.Course;
 import com.example.demo.modal.NumberPair;
+import com.example.demo.modal.TwoSumPost;
 import com.example.demo.modal.dto.CourseDto;
 import com.example.demo.service.CourseService;
 import com.example.demo.service.SumService;
@@ -20,7 +21,7 @@ import java.util.List;
 public class CourseController {
 
     @Autowired // IOC 控制反转
-    CourseService courseService; // Singleton
+            CourseService courseService; // Singleton
     //依赖注入 Dependency Injection
     @Autowired
     SumService sumService;
@@ -49,7 +50,13 @@ public class CourseController {
 
     @GetMapping(path = "/twosumget/{input}", produces = "application/json")
     public HttpEntity<Integer> twoSumGet(@PathVariable("input") String input) {
-        List<NumberPair> numbers =sumService.findNumbers(input);
+        List<NumberPair> numbers = sumService.findNumbers(input);
+        return new ResponseEntity(numbers, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/twosumpost")
+    public HttpEntity<Integer> twoSumPost(@RequestBody TwoSumPost request) {
+        List<NumberPair> numbers = sumService.findNumbers(request.getSum().toString(), request.getNumbers());
         return new ResponseEntity(numbers, HttpStatus.OK);
     }
 
